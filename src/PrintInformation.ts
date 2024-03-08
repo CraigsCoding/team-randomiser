@@ -1,7 +1,6 @@
 import TeamCreation from "./TeamCreation";
 import { PlayerDetails } from "./TeamInterfaces";
 
-
 class PrintInfo {
 
   async printTeam (team1: PlayerDetails[], team2: PlayerDetails[]) {
@@ -35,7 +34,6 @@ class PrintInfo {
     console.log(`\nDark Shirts Win Percentage: ${winPercentages[0].toFixed(2)}%`);
     console.log(`Light Shirts Win Percentage: ${winPercentages[1].toFixed(2)}%`);
   }
-
 
   async getRandomEntry<T> (array: T[]) {
     const randomIndex = Math.floor(Math.random() * array.length);

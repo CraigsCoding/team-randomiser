@@ -2,7 +2,6 @@ import { PlayerDetails, playStyleTypes } from "./TeamInterfaces";
 import * as readline from "readline";
 import * as fs from 'fs';
 
-
 class FileManagement {
     teamsheetFilePath: string = "./data/teamsheets/";
 

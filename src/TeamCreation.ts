@@ -12,8 +12,9 @@ class TeamCreation {
     }
 
     async filterSquad (names: string[]): Promise<PlayerDetails[]> {
-
-        const squad = await new FileManagement().importSquadPlayers(this.squadFilePath+this.squadFileName);
+        const fm = new FileManagement();
+        const squad = await fm.importSquadPlayers(this.squadFilePath+this.squadFileName);
+        fm.closeReadline();
         return squad.filter((player) => names.includes(player.name.toLowerCase()));
     }
 
