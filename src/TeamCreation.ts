@@ -14,7 +14,7 @@ class TeamCreation {
     async filterSquad (names: string[]): Promise<PlayerDetails[]> {
         const fm = new FileManagement();
         const squad = await fm.importSquadPlayers(this.squadFilePath+this.squadFileName);
-        fm.closeReadline();
+        await fm.closeReadline();
         return squad.filter((player) => names.includes(player.name.toLowerCase()));
     }
 
@@ -26,21 +26,26 @@ class TeamCreation {
         return array;
     }
 
-    splitPlayersIntoTeams (players: PlayerDetails[]): [PlayerDetails[], PlayerDetails[]] {
-        const specialists = players.filter(player => player.playstyle.includes('Specialist') === true);
-        const nonSpecialists = players.filter(player => player.playstyle.includes('Specialist') === false);
-
-        const team1Specialists = specialists.slice(0, specialists.length / 2);
-        const team2Specialists = specialists.slice(specialists.length / 2);
-
-        const team1NonSpecialists = nonSpecialists.slice(0, nonSpecialists.length / 2);
-        const team2NonSpecialists = nonSpecialists.slice(nonSpecialists.length / 2);
-
-        const team1 = [...team1Specialists, ...team1NonSpecialists];
-        const team2 = [...team2Specialists, ...team2NonSpecialists];
-
+    splitPlayersIntoTeams(players: PlayerDetails[], splitSpecialists = true): [PlayerDetails[], PlayerDetails[]] {
+        if (splitSpecialists) {
+          // Sort players by playstyle
+          players.sort((a, b) => a.playstyle.localeCompare(b.playstyle));
+        }
+      
+        const team1 = [];
+        const team2 = [];
+      
+        // Distribute players between the teams
+        for (let i = 0; i < players.length; i++) {
+          if (i % 2 === 0) {
+            team1.push(players[i]);
+          } else {
+            team2.push(players[i]);
+          }
+        }
+      
         return [team1, team2];
-    }
+      }
 
     addUpTeamTotals (team: PlayerDetails[]): number {
         let total = 0;
@@ -54,8 +59,9 @@ class TeamCreation {
         let team1Total = this.addUpTeamTotals(team1);
         let team2Total = this.addUpTeamTotals(team2);
         const targetSkillAmount = (team1Total + team2Total) / 2;
+        
         do {
-            [team1, team2] = this.splitPlayersIntoTeams(this.shufflePlayers(team1.concat(team2)));
+            [team1, team2] = this.splitPlayersIntoTeams(this.shufflePlayers(team1.concat(team2)), false);
             team1Total = this.addUpTeamTotals(team1);
             team2Total = this.addUpTeamTotals(team2);
         } while (team1Total > targetSkillAmount + this.balanceThreshold || team1Total < targetSkillAmount - this.balanceThreshold && team2Total > targetSkillAmount + this.balanceThreshold || team2Total < targetSkillAmount - this.balanceThreshold);

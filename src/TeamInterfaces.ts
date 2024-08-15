@@ -9,13 +9,14 @@ interface playStyle {
     number: number;
 }
 
-type playStyleTypes = "Defender" | "SpecialistDefender" | "Midfielder" | "Attacker" | "SpecialistAttacker";
+type playStyleTypes = "Defender" | "SpecialistDefender" | "Midfielder" | "SpecialistMidfielder" | "Attacker" | "SpecialistAttacker";
 
 const playStyles: Record<playStyleTypes, number> = {
-    SpecialistDefender: 5,
-    Defender: 4,
-    Midfielder: 3,
-    SpecialistAttacker: 2,
+    SpecialistDefender: 6,
+    SpecialistMidfielder: 5,
+    SpecialistAttacker: 4,
+    Defender: 3,
+    Midfielder: 2,
     Attacker: 1
 };
 
